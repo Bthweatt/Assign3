@@ -1,37 +1,47 @@
-# Program Name: main.py (use the name the program is saved as)
+# Program Name: Assignment3.py (use the name the program is saved as)
 # Course: IT3883/Section XXX
 # Student Name: Brandon Thweatt
-# Assignment Number: Lab2
-# Due Date: 02/07/ 2025
+# Assignment Number: Lab3
+# Due Date: 02/25/ 2025
 # Purpose: What does the program do (in a few sentences)?
-# This program takes input from multiple grades received by different students.
-# It will take each grade for each student and calculate an average grade point for each student.
+# The goal of this program is to provide a simple user interface that will convert MPG to KMPL,
+# all while being dynamically represented on the output. The application should not crash during invalid input.
 # List Specific resources used to complete the assignment.
-# PyCharm Enterprise edition
+# Pycharm enterprise edition
 
-# Initial function
-def calculate_averages(filename):
+import tkinter as tk
+from tkinter import StringVar
 
-    # create students array
-    students = []
+# Function that performs the conversion
+def convert_mpg_to_kmpl(*args):
+    try:
+        mpg_value = float(mpg_var.get())
+        kmpl_value = mpg_value * 0.425143707
+        kmpl_var.set(f"{kmpl_value:.4f}")  # Display result with 4 decimal places
+    except ValueError:
+        kmpl_var.set("Invalid Input")  # Handle non-numeric input
 
-    # Condition that opens the input file and takes each line of student grades through a loop to calculate the average
-    with open(filename, 'r') as file:
-        for line in file:
-            parts = line.split()
-            name = parts[0]
-            scores = list(map(int, parts[1:]))
-            average = sum(scores) / len(scores)
-            students.append((name, average))
+# Create tkinter window
+root = tk.Tk()
+root.title("MPG to KM/L Converter")
+root.geometry("300x150")
 
-    # Sorts them by highest grade average to lowest
-    students.sort(key=lambda x: x[1], reverse=True)
+# String variables for the user input and output
+mpg_var = StringVar()
+kmpl_var = StringVar()
 
-    # Loop that prints out each student and their grade average
-    for name, avg in students:
-        print(f"{name} {avg:.2f}")
+# Attach event listener to update conversion as user types
+mpg_var.trace_add("write", convert_mpg_to_kmpl)
 
+# GUI Layout lable for input
+tk.Label(root, text="Miles per Gallon (MPG):").pack(pady=5)
+mpg_entry = tk.Entry(root, textvariable=mpg_var)
+mpg_entry.pack(pady=5)
 
-# Assign the input file, then call the initial function passing the filename in
-filename = "Assignment2input.txt"
-calculate_averages(filename)
+# GUI Layout lable for output
+tk.Label(root, text="Kilometers per Liter (KM/L):").pack(pady=5)
+kmpl_label = tk.Label(root, textvariable=kmpl_var, font=("Arial", 12, "bold"))
+kmpl_label.pack(pady=5)
+
+# Init application
+root.mainloop()
